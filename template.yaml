@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: aws-lambda-extension
+
+Resources:
+  ExtensionLayer:
+    Type: AWS::Serverless::LayerVersion
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      LayerName: nodejs-example-extension-layer
+      ContentUri: .
+      CompatibleRuntimes:
+      - nodejs16.x
+      LicenseInfo: MIT-0
+      RetentionPolicy: Delete
+
+  DemoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: nodejs-example-extension
+      CodeUri: function/
+      Handler: index.handler
+      Runtime: nodejs18.x
+      MemorySize: 256
+      Timeout: 5
+      Tracing: Active
+      Layers:
+      - !Ref ExtensionLayer
+      Environment:
+        Variables:
+          DISPATCH_POST_URI: https://webhook.site/<REPLACE_WITH_YOUR_OWN_ID>
