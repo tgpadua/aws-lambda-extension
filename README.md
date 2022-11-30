@@ -22,5 +22,5 @@ sam build
 
 ## Deploy the function and extension
 ```bash
-sam deploy
+sam deploy --guided
 ```
